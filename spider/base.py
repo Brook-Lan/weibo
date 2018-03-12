@@ -25,7 +25,7 @@ class Spider:
     def __init__(self, login_session):
         self.login_session = login_session
         
-    @delay(0.5)
+    @delay(1)
     def get_text(self, url):
         return self.login_session.get_text(url)
     
