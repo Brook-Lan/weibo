@@ -17,7 +17,7 @@ class WeiboLogin:
         headers = {'User-Agent' : 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'}
         self._session = Session()
         self._session.headers.update(headers)
-        self.pre_log(nick, pwd)
+        self.login(nick, pwd)
         
     def login(self, nick, pwd):
         prelogin_url = 'http://login.sina.com.cn/sso/prelogin.php?entry=weibo&callback=sinaSSOController.preloginCallBack&su=%s&rsakt=mod&checkpin=1&client=ssologin.js(v1.4.15)&_=1400822309846' % nick 
