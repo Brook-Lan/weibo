@@ -58,7 +58,7 @@ class AuthorSpider(Spider):
                 print(url)
             yield url
 
-    def get_page_num(self, authors_text, limit=100):
+    def get_page_num(self, authors_text):
         """获取作者页面的页数
         """
         text = self.pre_parse_authors_url(authors_text)
@@ -67,13 +67,18 @@ class AuthorSpider(Spider):
         try:
             page_num = int(page_num)
         except:
-            page_num = 0
-        print("real_pagenum:", page_num)
-        return max(int(page_num), limit) 
+            page_num = 1
+        return page_num 
 
     def crawl(self):
-        urls = ["https://d.weibo.com/1087030002_2975_5001_0",  #财经
+        urls = [
+                #"https://d.weibo.com/1087030002_2975_5001_0",  #财经
                 "https://d.weibo.com/1087030002_2975_2025_0",  # 时尚
+                "https://d.weibo.com/1087030002_2975_1003_0",
+                "https://d.weibo.com/1087030002_2975_1001_0",
+                "https://d.weibo.com/1087030002_2975_2003_0",
+                "https://d.weibo.com/1087030002_2975_2006_0",
+                "https://d.weibo.com/1087030002_2975_2014_0",
                ]
 
         for url in urls:
