@@ -5,4 +5,5 @@
 
 @author:Brook
 """
+from .author import AuthorSpider
 

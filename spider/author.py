@@ -58,7 +58,7 @@ class AuthorSpider(Spider):
                 print(url)
             yield url
 
-    def get_page_num(self, authors_text, limit=10):
+    def get_page_num(self, authors_text, limit=100):
         """获取作者页面的页数
         """
         text = self.pre_parse_authors_url(authors_text)
@@ -81,6 +81,7 @@ class AuthorSpider(Spider):
             page_num = self.get_page_num(author_list_text)
             for i in range(1, page_num+1):
                 page_url = "{pre_url}?page={page}".format(pre_url=url, page=i)
+				print("url_list --> ", page_url)
                 author_list_text = self.get_text(page_url)
                 for author_url in self.parse_authors_url(author_list_text):
                     author_text = self.get_text(author_url)

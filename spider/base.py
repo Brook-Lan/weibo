@@ -13,7 +13,7 @@ from time import sleep
 def delay(time=3):
     def wrapper1(func):
         def wrapper2(*args, **kwargs):
-            print("delay %s seconds" % time)
+            #print("delay %s seconds" % time)
             sleep(time)
             result = func(*args, **kwargs)
             return result
@@ -25,7 +25,7 @@ class Spider:
     def __init__(self, login_session):
         self.login_session = login_session
         
-    @delay(1)
+    @delay(0.5)
     def get_text(self, url):
         return self.login_session.get_text(url)
     
