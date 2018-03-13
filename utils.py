@@ -4,7 +4,7 @@
 from pymongo import MongoClient
 
 class MongoPipeline:
-    query_fields = ()
+    query_fields = None  ## for update method
     def __init__(self, mongo_url, db_name, coll_name):
         self.client = MongoClient(mongo_url)
         db = self.client.get_database(db_name)
@@ -45,3 +45,7 @@ class MongoPipeline:
 
 class AuthorPipeline(MongoPipeline):
     query_fields = ("oid", )
+
+
+class WeiboPipeline(MongoPipeline):
+	query_fields = "Pubtime nickname Post".split()
