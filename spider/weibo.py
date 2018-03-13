@@ -10,20 +10,19 @@ import time
 
 from bs4 import BeautifulSoup
 
-
 from spider.base import Spider
 from login import WeiboLogin
 
 
 class WeiboUrl:
     """
-    待爬取的url由url模板生成
+    独立出来的url生成类，根据id生成爬取的url	
     """
     def __init__(self):
         self.tmplate = "https://weibo.com/p/aj/v6/mblog/mbloglist?ajwvr=6&domain={domain}&is_search=0&visible=0&is_all=1&is_tag=0&profile_ftype=1&page={page}&pagebar={pagebar}&id={id}"
         
     def pagenums_url_of_id(self, id_):
-        """
+        """返回的url用来获取用户微博的帖子页码数
         """
         para = {"page":1,
                 "pagebar":1,
@@ -34,6 +33,8 @@ class WeiboUrl:
         return url
     
     def contentpage_url_of_id(self, id_, page_nums):
+        """根据id生成微博内容的url
+        """
         for page in range(1, page_nums+1):
             url = self.tmplate.format(page=page, pagebar=0, id=id_, domain=id_[:6])
             yield url
@@ -48,6 +49,8 @@ class WeiboSpider(Spider):
         self.urlgen = WeiboUrl()
         
     def get_page_nums(self, id_):
+        """获取微博页码数
+        """
         url = self.urlgen.pagenums_url_of_id(id_)
         d = self.get_json(url)['data']
         reg = "countPage=(\d+)"
@@ -58,6 +61,8 @@ class WeiboSpider(Spider):
         return page_num
     
     def get_urls(self, id_):
+        """根据id获取微博的所有url
+        """
         page_nums = self.get_page_nums(id_)
         for url in self.urlgen.contentpage_url_of_id(id_, page_nums):
             yield url
@@ -98,6 +103,8 @@ class WeiboSpider(Spider):
                 yield item
                 
     def crawl(self, id_, limit_date=None):
+        """爬虫启动方法
+        """
         if limit_date is None:
             limit_date = "2010-01-01 01:00"
         for url in self.get_urls(id_):

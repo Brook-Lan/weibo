@@ -6,4 +6,5 @@
 @author:Brook
 """
 from .author import AuthorSpider
+from .weibo import WeiboSpider
 
