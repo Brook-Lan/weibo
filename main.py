@@ -17,7 +17,7 @@ def crawl_author():
             pipe.save(item)
             
             
-def crawl_weibo():
+def crawl_weibo(start=0, step=100):
     with open("weibo_ids.csv") as f:
         ids = f.readlines()
     ids = [s.strip().strip('"') for s in ids[1:]]
@@ -35,14 +35,17 @@ def crawl_weibo():
     
     id_ = "1006062557129567"
     with WeiboPipeline(mongo_url, mongo_db, mongo_coll) as pipe:
-        for id_ in ids[:100]:
+        for i, id_ in enumerate(ids[:start+step]):
+            print(i)
+            if i < start:
+                continue           
             for item in sp.crawl(id_, "2014-01-01 00:00"):
                 pipe.update(item)
         
 
 
 if __name__ == "__main__":
-    crawl_weibo()
+    crawl_weibo(start=18)
 
 
 
