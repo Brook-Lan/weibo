@@ -10,7 +10,7 @@ from time import sleep
 
 
 ## 延时装饰器
-def delay(time=3):
+def delay(time=1):
     def wrapper1(func):
         def wrapper2(*args, **kwargs):
             #print("delay %s seconds" % time)
@@ -29,6 +29,7 @@ class Spider:
     def get_text(self, url):
         return self.login_session.get_text(url)
     
+    @delay(0.6)
     def get_json(self, url):
         return self.login_session.get_json(url)
 
