@@ -14,11 +14,25 @@ class MongoPipeline:
         self.client.close()
 
     def save(self, item):
+#        query = {k:v for k,v in item.items() if k in self.query_fields}
+#        try:
+#            self.coll.update_one(query, {"$set":item}, upsert=True)
+#        except:
+#            self.close()
+        self.insert(item)
+            
+    def update(self, item):
         query = {k:v for k,v in item.items() if k in self.query_fields}
         try:
             self.coll.update_one(query, {"$set":item}, upsert=True)
         except:
             self.close()
+    
+    def insert(self, item):
+        try:
+            self.coll.insert_one(item)
+        except:
+            self.close()   
             
     def find(self, *args, **kwargs):
         return self.coll.find(*args, **kwargs)
