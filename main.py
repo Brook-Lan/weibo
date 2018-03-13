@@ -18,21 +18,27 @@ def crawl_author():
             
             
 def crawl_weibo():
+    with open("weibo_ids.csv") as f:
+        ids = f.readlines()
+    ids = [s.strip().strip('"') for s in ids[1:]]
+    
     account = input("enter your weibo account:\n")
     pwd = input("enter your passwords:\n")
     lg = WeiboLogin(account, pwd)
     sp = WeiboSpider(lg)
     
+    from utils import WeiboPipeline
+    mongo_url = "localhost"
+    mongo_db = "weibo"
+    mongo_coll = "posts"
+    
+    
     id_ = "1006062557129567"
-    
-    from utils import MongoPipeline
-    mongo_url = "192.168.2.126"
-    mongo_db = "test"
-    mongo_coll = "weibo_new"
-    
-    with MongoPipeline(mongo_url, mongo_db, mongo_coll) as pipe:
-        for item in sp.crawl(id_):
-            pipe.save(item)    
+    with WeiboPipeline(mongo_url, mongo_db, mongo_coll) as pipe:
+        for id_ in ids[:100]:
+            for item in sp.crawl(id_, "2014-01-01 00:00"):
+                pipe.update(item)
+        
 
 
 if __name__ == "__main__":

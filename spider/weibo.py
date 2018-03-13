@@ -97,12 +97,16 @@ class WeiboSpider(Spider):
                 item["Scraltime"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 yield item
                 
-    def crawl(self, id_):
+    def crawl(self, id_, limit_date=None):
+        if limit_date is None:
+            limit_date = "2010-01-01 01:00"
         for url in self.get_urls(id_):
             print(url)
             d = self.get_json(url)
             for item in self.parse(d):
                 yield item
+            if item['Pubtime'] < limit_date:
+                break
             
 
 
