@@ -59,7 +59,7 @@ class WeiboLogin:
         self.get_text(urll)
     
     def get_response(self, url):
-        res = self._session.get(url, timeout=6)
+        res = self._session.get(url)
         return res
     
     def get_text(self, url):
