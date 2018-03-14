@@ -7,7 +7,9 @@
 """
 import re
 import time
+from datetime import datetime
 
+from lxml import etree
 from bs4 import BeautifulSoup
 
 from spider.base import Spider
@@ -115,3 +117,38 @@ class WeiboSpider(Spider):
             if item['pub_time'] < limit_date:
                 break
             
+
+
+def to_digit(str_):
+    m = re.search("\d+", str_)
+    if m:
+        return int(m.group())
+    else:
+        return 0
+
+
+class WeiboSpider2(WeiboSpider):
+    """该爬虫用xpath取代BeautifulSoup提取网页元素，提取的字段稍有改动，其他无区别
+    """
+    def parse(self, json_data):
+        text = json_data['data']
+        tree = etree.HTML(text.replace('\u200b', ""))
+        tmp_tree = tree.xpath("//div[@mid]")
+        for sel in tmp_tree:
+            item = {}
+            try:
+                item['author'] = sel.xpath(".//div[@class='WB_info']/a[@usercard]/text()")[0]
+            except:
+                continue
+            tmp_id = sel.xpath(".//div[@class='WB_info']/a[@usercard]/@usercard")[0]
+            item['author_id'] = re.findall("id=(\d+)", tmp_id)[0]
+            item['pub_time'] = sel.xpath(".//div/a[@date]/@title")[0]
+            item['pub_from'] = "".join(sel.xpath(".//div/a[@class='S_txt2' and @action-type]/text()"))
+            item['post'] = "".join([s.strip() for s in sel.xpath(".//div[@class='WB_detail']/div[contains(@class, 'WB_text') and @nick-name]/text()")])
+            item['transfer_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='forward_btn_text']//em/text()")[-1])
+            item['comment_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='comment_btn_text']//em/text()")[-1])
+            item['like_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@node-type='like_status']//em/text()")[-1])
+            
+            item['crawl_time'] = datetime.now()
+            yield item
+
