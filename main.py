@@ -1,6 +1,6 @@
 from utils import AuthorPipeline
-from spider import AuthorSpider
-from spider.weibo import WeiboSpider
+from spider import AuthorSpider, WeiboSpider
+#from spider.weibo import WeiboSpider2
 from login import WeiboLogin
 
 def crawl_author():
@@ -30,7 +30,7 @@ def crawl_weibo(start=0, step=100):
     from utils import WeiboPipeline
     mongo_url = "localhost"
     mongo_db = "weibo"
-    mongo_coll = "posts"
+    mongo_coll = "test_posts"
     
     
     id_ = "1006062557129567"

@@ -48,4 +48,4 @@ class AuthorPipeline(MongoPipeline):
 
 
 class WeiboPipeline(MongoPipeline):
-	query_fields = "Pubtime nickname Post".split()
+	query_fields = "pub_time author post".split()

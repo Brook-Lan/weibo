@@ -76,30 +76,30 @@ class WeiboSpider(Spider):
         if len(tmp) > 0 :
             for i in range(len(tmp)):
                 item = {}
-                item["nickname"] = tmp[i].find("div", attrs={"class": "WB_info"}).find("a").get_text()
-                item["Post"] = tmp[i].find("div", attrs={"class": "WB_text W_f14"}).get_text().replace("\n", "").replace(" ","").replace( "\u200b", "")
+                item["author"] = tmp[i].find("div", attrs={"class": "WB_info"}).find("a").get_text()
+                item["post"] = tmp[i].find("div", attrs={"class": "WB_text W_f14"}).get_text().replace("\n", "").replace(" ","").replace( "\u200b", "")
 
                 # -*- 爬取发布时间 -*-
-                item["Pubtime"] = tmp[i].find("a", attrs={"class": "S_txt2"}).get("title")
+                item["pub_time"] = tmp[i].find("a", attrs={"class": "S_txt2"}).get("title")
 
                 # -*- 爬取转发数 -*-
                 if re.findall(reg,str(tmp2[i].find("span", attrs={"class": "line S_line1","node-type":"forward_btn_text"})), re.S):
-                    item["Transfer_num"] = int(re.findall(reg,str(tmp2[i].find("span", attrs={"class": "line S_line1","node-type":"forward_btn_text"})), re.S)[0])
+                    item["transfer_num"] = int(re.findall(reg,str(tmp2[i].find("span", attrs={"class": "line S_line1","node-type":"forward_btn_text"})), re.S)[0])
                 else:
-                    item["Transfer_num"] = 0
+                    item["transfer_num"] = 0
 
                 # -*- 爬取评论数 -*-
                 if re.findall(reg, str(tmp2[i].find("span", attrs={"class": "line S_line1", "node-type": "comment_btn_text"})), re.S):
-                    item["Comment_num"] = int(re.findall(reg, str(tmp2[i].find("span", attrs={"class": "line S_line1", "node-type": "comment_btn_text"})), re.S)[0])
+                    item["comment_num"] = int(re.findall(reg, str(tmp2[i].find("span", attrs={"class": "line S_line1", "node-type": "comment_btn_text"})), re.S)[0])
                 else:
-                    item["Comment_num"] = 0
+                    item["comment_num"] = 0
 
                 # -*- 爬取点赞数 -*-
                 if re.findall(reg, str(tmp2[i].find("span", attrs={"node-type": "like_status"})), re.S):
-                    item["Like_num"] = int(re.findall(reg, str(tmp2[i].find("span", attrs={"node-type": "like_status"})), re.S)[0])
+                    item["like_num"] = int(re.findall(reg, str(tmp2[i].find("span", attrs={"node-type": "like_status"})), re.S)[0])
                 else:
-                    item["Like_num"] = 0
-                item["Scraltime"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                    item["like_num"] = 0
+                item["crawl_time"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 yield item
                 
     def crawl(self, id_, limit_date=None):
@@ -112,6 +112,6 @@ class WeiboSpider(Spider):
             d = self.get_json(url)
             for item in self.parse(d):
                 yield item
-            if item['Pubtime'] < limit_date:
+            if item['pub_time'] < limit_date:
                 break
             
