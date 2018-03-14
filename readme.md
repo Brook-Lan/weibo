@@ -8,5 +8,6 @@
 python3
 requests
 pymongo
+BeautifulSoup
 ```
 

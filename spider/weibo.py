@@ -115,13 +115,3 @@ class WeiboSpider(Spider):
             if item['Pubtime'] < limit_date:
                 break
             
-
-
-
-
-
-
-
-
-
-    
