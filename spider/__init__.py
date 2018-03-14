@@ -6,5 +6,5 @@
 @author:Brook
 """
 from .author import AuthorSpider
-from .weibo import WeiboSpider
+from .weibo import WeiboSpider, WeiboSpider2
 

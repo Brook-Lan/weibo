@@ -25,11 +25,11 @@ class Spider:
     def __init__(self, login_session):
         self.login_session = login_session
         
-    @delay(0.6)
+    @delay(0.3)
     def get_text(self, url):
         return self.login_session.get_text(url)
     
-    @delay(0.6)
+    @delay(0.3)
     def get_json(self, url):
         return self.login_session.get_json(url)
 
