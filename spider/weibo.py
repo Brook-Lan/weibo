@@ -119,7 +119,11 @@ class WeiboSpider(Spider):
             
 
 
-def to_digit(str_):
+def to_digit(eles):
+    try:
+        str_ = eles[-1]
+    except:
+        return 0
     m = re.search("\d+", str_)
     if m:
         return int(m.group())
@@ -145,9 +149,9 @@ class WeiboSpider2(WeiboSpider):
             item['pub_time'] = sel.xpath(".//div/a[@date]/@title")[0]
             item['pub_from'] = "".join(sel.xpath(".//div/a[@class='S_txt2' and @action-type]/text()"))
             item['post'] = "".join([s.strip() for s in sel.xpath(".//div[@class='WB_detail']/div[contains(@class, 'WB_text') and @nick-name]/text()")])
-            item['transfer_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='forward_btn_text']//em/text()")[-1])
-            item['comment_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='comment_btn_text']//em/text()")[-1])
-            item['like_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@node-type='like_status']//em/text()")[-1])
+            item['transfer_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='forward_btn_text']//em/text()"))
+            item['comment_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@class='line S_line1' and @node-type='comment_btn_text']//em/text()"))
+            item['like_num'] = to_digit(sel.xpath(".//div[@class='WB_handle']//span[@node-type='like_status']//em/text()"))
             
             item['crawl_time'] = datetime.now()
             yield item
